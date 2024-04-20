@@ -36,7 +36,8 @@ const editUser = async(req, res = response) => {
           // Generar respuesta exitosa
           return res.status(200).json({
               ok: true,
-              msg: 'Usuario actualizado exitosamente'
+              msg: 'Usuario actualizado exitosamente',
+              user: usuario
           });        
       } catch (error) {
           console.log(error);
