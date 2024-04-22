@@ -71,23 +71,25 @@ const editPerro = async(req, res = response) => {
             });
       }
 }
-
-const getDogs = async(req, res = response) => {
-      const { idUser } = req.body;
+const getDogs = async (req, res = response) => {
+      const idUser = req.query.idUser;
+      console.log(idUser);
       try {
-            const dbDogs = await Dog.find({ idPersona: idUser });
-            return res.status(200).json({
-                  ok: true,
-                  dogs: dbDogs
-            });
+          const dbDogs = await Dog.find({ idPersona: idUser });
+          return res.status(200).json({
+              ok: true,
+              dogs: dbDogs
+          });
       } catch (error) {
-            console.log(error);
-            return res.status(500).json({
-                  ok: false,
-                  msg: 'Por favor hable con el administrador'
-            });
+          console.log(error);
+          return res.status(500).json({
+              ok: false,
+              msg: 'Por favor hable con el administrador'
+          });
       }
-}
+  }
+  
+  
 
 const getAllDogs = async(req, res = response) => {
       try {

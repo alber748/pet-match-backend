@@ -11,8 +11,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 
 // obetener perros segun id usuario
 router.get( '/get', [
-  check('idUser', 'El id del usuario es obligatorio').not().isEmpty(),
-  validarCampos
+
 ], getDogs );
 // obetener todos los perros 
 router.get( '/get-all', [
