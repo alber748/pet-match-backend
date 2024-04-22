@@ -3,7 +3,6 @@ const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
-
 const crearUsuario = async(req, res = response) => {
 
     const { email, name, password, lastname, phone, location, kindRol } = req.body;
@@ -56,7 +55,6 @@ const loginUsuario = async(req, res = response) => {
     const { email, password } = req.body;
     
     try {
-        
         const dbUser = await Usuario.findOne({ email });
 
         if(  !dbUser ) {
@@ -88,7 +86,7 @@ const loginUsuario = async(req, res = response) => {
             token
         });
 
-
+        
 
     } catch (error) {
         console.log(error);
