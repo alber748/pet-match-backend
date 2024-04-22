@@ -3,7 +3,21 @@ const { upload, uploadFileToCloudinary } = require('../helpers/images');
 const fs = require('fs');
 const path = require('path');
 const Dog = require('../models/Dog');
+const { getAllDogs, getDogs } = require('../controllers/dog');
 const router = express.Router();
+const { check } = require('express-validator');
+const { validarCampos } = require('../middlewares/validar-campos');
+
+
+// obetener perros segun id usuario
+router.get( '/get', [
+  check('idUser', 'El id del usuario es obligatorio').not().isEmpty(),
+  validarCampos
+], getDogs );
+// obetener todos los perros 
+router.get( '/get-all', [
+], getAllDogs );
+
 
 router.post('/', upload.array('files', 3), async function (req, res) {
   try {

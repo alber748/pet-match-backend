@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearPerro, deletePerro, editPerro, getDogs } = require('../controllers/dog');
+const { crearPerro, deletePerro, editPerro, getDogs, getAllDogs } = require('../controllers/dog');
 const { validarCampos } = require('../middlewares/validar-campos');
 const router = Router();
 
@@ -38,12 +38,6 @@ router.post( '/edit', [
       check('fotos', 'Las fotografias son obligatorias').not().isEmpty(),
     validarCampos
 ], editPerro );
-
-// obetener perros segun id usuario
-router.post( '/get', [
-    check('idUser', 'El id del usuario es obligatorio').isEmail(),
-    validarCampos
-], getDogs );
 
 // Validar y revalidar token
 
