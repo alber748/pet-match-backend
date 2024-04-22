@@ -7,7 +7,7 @@ const DogSchema = Schema({
         required: true
     },
     idPersona: {
-        type: Number,
+        type: String,
     },
     edad: {
         type: String,
