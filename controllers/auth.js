@@ -82,11 +82,14 @@ const loginUsuario = async(req, res = response) => {
             ok: true,
             uid: dbUser.id,
             name: dbUser.name,
+            lastname: dbUser.lastname,
+            phone: dbUser.phone,
+            location: dbUser.location,
+            kindRol: dbUser.kindRol,
             email: dbUser.email,
+            entidad: dbUser.entidad,
             token
         });
-
-        
 
     } catch (error) {
         console.log(error);
