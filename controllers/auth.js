@@ -88,6 +88,7 @@ const loginUsuario = async(req, res = response) => {
             kindRol: dbUser.kindRol,
             email: dbUser.email,
             entidad: dbUser.entidad,
+            photo: dbUser.photo ? dbUser.photo : null,
             token
         });
 

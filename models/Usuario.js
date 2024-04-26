@@ -9,6 +9,9 @@ const UsuarioSchema = Schema({
     lastname: {
         type: String,
     },
+    photo : {
+        type: String,
+    },
     email: {
         type: String,
         required: true,

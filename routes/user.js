@@ -4,7 +4,8 @@ const { revalidarToken } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
-const { cambiarContrasena, editUser } = require('../controllers/user');
+const { cambiarContrasena, editUser, deleteUser, addPhotoUser } = require('../controllers/user');
+const { upload } = require('../helpers/images');
 
 
 const router = Router();
@@ -22,7 +23,10 @@ router.put( '/edit', [
     validarCampos
 ], editUser );
 
+// delete user 
+router.delete( '/delete', deleteUser );
 
+router.post( '/add-photo', upload.single("file"), addPhotoUser );
 
 router.post( '/cambiar-pasword', [
     check('email', 'El email es obligatorio').isEmail(),
