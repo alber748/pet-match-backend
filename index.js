@@ -21,6 +21,7 @@ app.use( express.json() );
 app.use( '/api/auth', require('./routes/auth') );
 app.use( '/api/user', require('./routes/user') );
 app.use( '/api/dogs', require('./routes/upload') );
+app.use( '/api/postulaciones', require('./routes/postulaciones') );
 
 app.listen( process.env.PORT, () => {
     console.log(`Servidor corriendo en puerto ${ process.env.PORT }`);
