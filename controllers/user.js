@@ -155,8 +155,14 @@ const addPhotoUser = async (req, res) => {
     const buffer = uploadedFile.buffer;
 
     // Guardar la imagen localmente (opcional)
-    const localPath = path.join(__dirname, '../public/uploads', uploadedFile.originalname);
-    fs.writeFileSync(localPath, buffer);
+    const uploadDir = path.join(__dirname, '../public/uploads');
+        if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        const localPath = path.join(uploadDir, uploadedFile.originalname);
+        fs.writeFileSync(localPath, buffer);
+
 
     // Subir la imagen a Cloudinary
     const cloudinaryUrl = await uploadFileToCloudinary(localPath);
