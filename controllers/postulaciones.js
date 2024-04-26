@@ -33,7 +33,7 @@ const crearPostulacion = async (req, res = response) => {
   }
 };
 
-const getPostulaciones = async (req, res = response) => {
+const getPostulacionesByPostulant = async (req, res = response) => {
   const idUser = req.query.idUser;
 
   try {
@@ -90,6 +90,63 @@ const getPostulaciones = async (req, res = response) => {
     });
   }
 };
+
+const getPostulacionesBySitter = async (req, res = response) => {
+
+    const idSitter = req.query.idUser;
+    
+    try {
+        const dbPostulaciones = await Postulacion.find({ idSitter });
+    
+        if (dbPostulaciones.length === 0) {
+        return res.status(200).json({
+            ok: true,
+            msg: "No hay postulaciones",
+        });
+        }
+    
+        const postulacionesCompletas = await Promise.all(
+        dbPostulaciones.map(async (postulacion) => {
+            const usuario = await Usuario.findById(postulacion.idUser);
+            const perro = await Dog.findById(postulacion.idPerro);
+
+            return {
+              estado: postulacion.state,
+              usuario: {
+                  id: usuario.id,
+                  name: usuario.name,
+                  email: usuario.email,
+                  lastname: usuario.lastname,
+                  phone: usuario.phone,
+                  location: usuario.location,
+              },
+              perro: {
+                  id: perro.id,
+                  name: perro.name,
+                  edad: perro.edad,
+                  peso: perro.peso,
+                  situacion: perro.situacion,
+                  descripcion: perro.descripcion,
+                  fotos: perro.fotos,
+              },
+            };
+        })
+      );
+
+      if (postulacionesCompletas.length !== 0) {
+        return res.status(200).json({
+          ok: true,
+          postulaciones: postulacionesCompletas,
+        });
+      }
+} catch (error) {
+    return res.status(500).json({
+        ok: false,
+        msg: "Por favor hable con el administrador",
+    });
+}
+
+}
 
 const deletePostulacion = async (req, res = response) => {
     const id = req.query.id;
@@ -151,7 +208,8 @@ const changeState = async (req, res = response) => {
 
 module.exports = {
   crearPostulacion,
-  getPostulaciones,
   deletePostulacion,
-  changeState
+  changeState,
+  getPostulacionesBySitter,
+  getPostulacionesByPostulant
 };

@@ -8,6 +8,9 @@ const PostulacionSchema = Schema({
     idPerro : {
         type: String,
     },
+    idSitter : {
+        type: String,
+    },
     state : {
         type: String,
         default: 'pendiente'

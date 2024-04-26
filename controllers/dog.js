@@ -90,6 +90,23 @@ const getDogs = async (req, res = response) => {
   }
   
   
+  const getDogById = async (req, res = response) => {
+      const id = req.query.id;
+      try {
+          const dbDog = await Dog.findById(id);
+          return res.status(200).json({
+              ok: true,
+              dog: dbDog
+          });
+      } catch (error) {
+          console.log(error);
+          return res.status(500).json({
+              ok: false,
+              msg: 'Por favor hable con el administrador'
+          });
+      }
+  
+  }
 
 const getAllDogs = async(req, res = response) => {
       try {
@@ -113,5 +130,6 @@ module.exports = {
       deletePerro,
       editPerro,
       getDogs,
-      getAllDogs
+      getAllDogs,
+      getDogById
 }

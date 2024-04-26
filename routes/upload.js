@@ -3,10 +3,8 @@ const { upload, uploadFileToCloudinary } = require('../helpers/images');
 const fs = require('fs');
 const path = require('path');
 const Dog = require('../models/Dog');
-const { getAllDogs, getDogs } = require('../controllers/dog');
+const { getAllDogs, getDogs, getDogById } = require('../controllers/dog');
 const router = express.Router();
-const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
 
 
 // obetener perros segun id usuario
@@ -16,6 +14,9 @@ router.get( '/get', [
 // obetener todos los perros 
 router.get( '/get-all', [
 ], getAllDogs );
+
+// obtener perro por id 
+router.get( '/get-by-id', getDogById );
 
 
 router.post('/', upload.array('files', 3), async function (req, res) {
