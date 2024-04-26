@@ -55,6 +55,7 @@ const getPostulacionesByPostulant = async (req, res = response) => {
         
         return {
           estado: postulacion.state,
+          id: postulacion._id,
           usuario: {
             id: usuario.id,
             name: usuario.name,
@@ -112,6 +113,7 @@ const getPostulacionesBySitter = async (req, res = response) => {
 
             return {
               estado: postulacion.state,
+              id : postulacion._id,
               usuario: {
                   id: usuario.id,
                   name: usuario.name,
