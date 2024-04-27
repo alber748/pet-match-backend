@@ -23,6 +23,7 @@ const crearPostulacion = async (req, res = response) => {
     return res.status(201).json({
       ok: true,
       msg: "Postulacion creada correctamente",
+      postulacion: dbPostulacion
     });
   } catch (error) {
     console.log(error);
