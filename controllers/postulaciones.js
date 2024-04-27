@@ -71,7 +71,7 @@ const getPostulacionesByPostulant = async (req, res = response) => {
             peso: perro.peso,
             situacion: perro.situacion,
             descripcion: perro.descripcion,
-            fotos: perro.files,
+            files: perro.files,
           },
         };
       })
@@ -129,7 +129,7 @@ const getPostulacionesBySitter = async (req, res = response) => {
                   peso: perro.peso,
                   situacion: perro.situacion,
                   descripcion: perro.descripcion,
-                  fotos: perro.files,
+                  files: perro.files,
               },
             };
         })
