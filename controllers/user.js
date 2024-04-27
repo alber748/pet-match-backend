@@ -44,7 +44,16 @@ const editUser = async(req, res = response) => {
           return res.status(200).json({
               ok: true,
               msg: 'Usuario actualizado exitosamente',
-              user: usuario
+              user: {
+                    id: usuario._id,
+                    name: usuario.name,
+                    lastname: usuario.lastname,
+                    email: usuario.email,
+                    phone: usuario.phone,
+                    location: usuario.location,
+                    kindRol: usuario.kindRol,
+                    entidad: usuario.entidad
+              }
           });        
       } catch (error) {
           console.log(error);
