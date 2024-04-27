@@ -120,9 +120,6 @@ router.post('/edit-perro', upload.array('files', 3) , async function (req, res) 
       // Agregar las nuevas URLs a la lista actualizada
       updatedUrls.push(...urls);
 
-    }
-
-    
 
     // Actualizar la lista de imágenes del perro en la base de datos
     dbDog.files = updatedUrls;
@@ -140,6 +137,8 @@ router.post('/edit-perro', upload.array('files', 3) , async function (req, res) 
       msg: 'Perro editado correctamente',
       data: dbDog,
     });
+
+    }
 
   }
   catch (error) {
