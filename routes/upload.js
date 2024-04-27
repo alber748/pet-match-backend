@@ -121,22 +121,22 @@ router.post('/edit-perro', upload.array('files', 3) , async function (req, res) 
       updatedUrls.push(...urls);
 
 
-    // Actualizar la lista de imágenes del perro en la base de datos
-    dbDog.files = updatedUrls;
-    dbDog.name = data.name;
-    dbDog.idPersona = data.idPersona;
-    dbDog.edad = data.edad;
-    dbDog.peso = data.peso;
-    dbDog.situacion = data.situacion;
-    dbDog.descripcion = data.descripcion;
-    await dbDog.save();
+      // Actualizar la lista de imágenes del perro en la base de datos
+      dbDog.files = updatedUrls;
+      dbDog.name = data.name;
+      dbDog.idPersona = data.idPersona;
+      dbDog.edad = data.edad;
+      dbDog.peso = data.peso;
+      dbDog.situacion = data.situacion;
+      dbDog.descripcion = data.descripcion;
+      await dbDog.save();
 
-    // Enviar respuesta con el resultado
-    res.status(201).json({
-      ok: true,
-      msg: 'Perro editado correctamente',
-      data: dbDog,
-    });
+      // Enviar respuesta con el resultado
+      res.status(201).json({
+        ok: true,
+        msg: 'Perro editado correctamente',
+        data: dbDog,
+      });
 
     }
 
