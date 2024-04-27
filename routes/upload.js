@@ -3,7 +3,7 @@ const { upload, uploadFileToCloudinary, deleteFileFromCloudinary } = require('..
 const fs = require('fs');
 const path = require('path');
 const Dog = require('../models/Dog');
-const { getAllDogs, getDogs, getDogById } = require('../controllers/dog');
+const { getAllDogs, getDogs, getDogById, deletePerro } = require('../controllers/dog');
 const router = express.Router();
 
 
@@ -17,7 +17,7 @@ router.get( '/get-all', [
 
 // obtener perro por id 
 router.get( '/get-by-id', getDogById );
-
+router.post('/delete', deletePerro);
 
 router.post('/', upload.array('files', 3), async function (req, res) {
   try {

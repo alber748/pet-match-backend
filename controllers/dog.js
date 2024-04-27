@@ -14,7 +14,7 @@ const crearPerro = async(data, url) => {
 }
 
 const deletePerro = async(req, res = response) => {
-      const { id } = req.body;
+      const id  = req.query.id;
       try {
             
             const dbDog = await Dog.findById( id );
