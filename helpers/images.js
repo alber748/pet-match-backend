@@ -47,6 +47,15 @@ const uploadFileInLocalPath =  async ( req, res ) => {
   }
 }
 
+const deleteFileFromCloudinary = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error('Error al eliminar archivo de Cloudinary:', error);
+    throw new Error('Error al eliminar archivo de Cloudinary');
+  }
+};
+
 const uploadFileToCloudinary = async (fileBuffer, folder = 'perfil') => {
   try {
     const result = await cloudinary.uploader.upload(fileBuffer, { folder });
@@ -59,4 +68,4 @@ const uploadFileToCloudinary = async (fileBuffer, folder = 'perfil') => {
 };
 
 
-module.exports = { uploadFileToCloudinary, upload, uploadFileInLocalPath };
+module.exports = { uploadFileToCloudinary, upload, uploadFileInLocalPath, deleteFileFromCloudinary };

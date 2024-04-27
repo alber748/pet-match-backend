@@ -1,5 +1,5 @@
 const express = require('express');
-const { upload, uploadFileToCloudinary } = require('../helpers/images');
+const { upload, uploadFileToCloudinary, deleteFileFromCloudinary } = require('../helpers/images');
 const fs = require('fs');
 const path = require('path');
 const Dog = require('../models/Dog');
@@ -21,35 +21,28 @@ router.get( '/get-by-id', getDogById );
 
 router.post('/', upload.array('files', 3), async function (req, res) {
   try {
-    const uploadedFiles = req.files; // Array de archivos subidos por multer
+    const uploadedFiles = req.files;
     const data = req.body;
 
     const urls = await Promise.all(uploadedFiles.map(async (file) => {
       const buffer = file.buffer;
 
-      // Directorio donde se guardarán los archivos localmente
       const uploadDir = path.join(__dirname, '../public/uploads');
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
 
-      // Ruta local del archivo
       const localPath = path.join(uploadDir, file.originalname);
 
-      // Guardar el archivo localmente
       fs.writeFileSync(localPath, buffer);
 
-      // Subir la imagen a Cloudinary
       const url = await uploadFileToCloudinary(localPath);
       
-      // Eliminar la imagen local después de subirla a Cloudinary
       fs.unlinkSync(localPath);
       
-      // Retornar la URL para agregarla al array de URLs
       return url;
     }));
 
-    // Crear el perro en la base de datos con la URL de las imágenes
     const newDog = await crearPerro(data, urls);
 
     // Enviar respuesta con el resultado
@@ -61,6 +54,75 @@ router.post('/', upload.array('files', 3), async function (req, res) {
   } catch (error) {
     console.error('Error al procesar archivos y subir a Cloudinary:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+router.post('/edit-perro', upload.array('files', 3) , async function (req, res) {
+  
+  const data = req.body;
+  const uploadedFiles = req.files; // Array de archivos subidos por multer
+  const urlsToDelete = data.urlsToDel;
+
+  try {            
+    const dbDog = await Dog.findById( data.id );
+    if ( !dbDog ) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'El perro no existe'
+      });
+    }
+
+    // Pendiente: Eliminar las imágenes que se quitaron de cloudinary
+
+    const urls = await Promise.all(uploadedFiles.map(async (file) => {
+      const buffer = file.buffer;
+
+      const uploadDir = path.join(__dirname, '../public/uploads');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const localPath = path.join(uploadDir, file.originalname);
+      fs.writeFileSync(localPath, buffer);
+      const url = await uploadFileToCloudinary(localPath);
+      fs.unlinkSync(localPath);  
+      return url;
+    }));
+
+    const existingUrls = dbDog.files;
+
+    const updatedUrls = existingUrls.map((url, index) => {
+      if (urlsToDelete.includes(url)) {
+        return null;
+      } else {
+        return url;
+      }
+    }).filter(Boolean);
+
+    // Agregar las nuevas URLs a la lista actualizada
+    updatedUrls.push(...urls);
+
+    // Actualizar la lista de imágenes del perro en la base de datos
+    dbDog.files = updatedUrls;
+    dbDog.name = data.name;
+    dbDog.idPersona = data.idPersona;
+    dbDog.edad = data.edad;
+    dbDog.peso = data.peso;
+    dbDog.situacion = data.situacion;
+    dbDog.descripcion = data.descripcion;
+    await dbDog.save();
+
+    // Enviar respuesta con el resultado
+    res.status(201).json({
+      ok: true,
+      msg: 'Perro editado correctamente',
+      data: dbDog,
+    });
+
+
+  }
+  catch (error) {
+    console.error('Error al editar el perro en la base de datos:', error);
+    throw error;
   }
 });
 

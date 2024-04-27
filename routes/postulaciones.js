@@ -1,7 +1,13 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { crearPostulacion, deletePostulacion, changeState, getPostulacionesBySitter, getPostulacionesByPostulant } = require('../controllers/postulaciones');
+const { crearPostulacion, 
+    deletePostulacion, 
+    changeState, 
+    getPostulacionesBySitter, 
+    getPostulacionesByPostulant 
+    ,editarPostulacion
+} = require('../controllers/postulaciones');
 const router = Router();
 
 // Crear una postulacion
@@ -23,7 +29,5 @@ router.post( '/update-state', changeState);
 
 // get postulacion by id de usario dueño
 router.get( '/get-by-sitter', getPostulacionesBySitter);
-
-
 
 module.exports = router;
