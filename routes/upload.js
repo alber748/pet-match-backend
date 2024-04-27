@@ -74,32 +74,55 @@ router.post('/edit-perro', upload.array('files', 3) , async function (req, res) 
 
     // Pendiente: Eliminar las imágenes que se quitaron de cloudinary
 
-    const urls = await Promise.all(uploadedFiles.map(async (file) => {
-      const buffer = file.buffer;
+    console.log('uploadedFiles:', uploadedFiles);
 
-      const uploadDir = path.join(__dirname, '../public/uploads');
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      const localPath = path.join(uploadDir, file.originalname);
-      fs.writeFileSync(localPath, buffer);
-      const url = await uploadFileToCloudinary(localPath);
-      fs.unlinkSync(localPath);  
-      return url;
-    }));
+    if (uploadedFiles.length === 0) {
+      
+      dbDog.name = data.name;
+      dbDog.idPersona = data.idPersona;
+      dbDog.edad = data.edad;
+      dbDog.peso = data.peso;
+      dbDog.situacion = data.situacion;
+      dbDog.descripcion = data.descripcion;
+      await dbDog.save();
+      res.status(201).json({
+        ok: true,
+        msg: 'Perro editado correctamente',
+        data: dbDog,
+      });
+      return;
+    } else {
 
-    const existingUrls = dbDog.files;
-
-    const updatedUrls = existingUrls.map((url, index) => {
-      if (urlsToDelete.includes(url)) {
-        return null;
-      } else {
+      const urls = await Promise.all(uploadedFiles.map(async (file) => {
+        const buffer = file.buffer;
+  
+        const uploadDir = path.join(__dirname, '../public/uploads');
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        const localPath = path.join(uploadDir, file.originalname);
+        fs.writeFileSync(localPath, buffer);
+        const url = await uploadFileToCloudinary(localPath);
+        fs.unlinkSync(localPath);  
         return url;
-      }
-    }).filter(Boolean);
+      }));
+  
+      const existingUrls = dbDog.files;
+  
+      const updatedUrls = existingUrls.map((url, index) => {
+        if (urlsToDelete.includes(url)) {
+          return null;
+        } else {
+          return url;
+        }
+      }).filter(Boolean);
+  
+      // Agregar las nuevas URLs a la lista actualizada
+      updatedUrls.push(...urls);
 
-    // Agregar las nuevas URLs a la lista actualizada
-    updatedUrls.push(...urls);
+    }
+
+    
 
     // Actualizar la lista de imágenes del perro en la base de datos
     dbDog.files = updatedUrls;
@@ -117,7 +140,6 @@ router.post('/edit-perro', upload.array('files', 3) , async function (req, res) 
       msg: 'Perro editado correctamente',
       data: dbDog,
     });
-
 
   }
   catch (error) {
