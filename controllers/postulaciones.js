@@ -54,6 +54,8 @@ const getPostulacionesByPostulant = async (req, res = response) => {
 
         const perro = await Dog.findById(idPerro);
         
+        const fotoUsuario = usuario.photo ? usuario.photo : ""; 
+
         return {
           estado: postulacion.state,
           id: postulacion._id,
@@ -64,6 +66,7 @@ const getPostulacionesByPostulant = async (req, res = response) => {
             lastname: usuario.lastname,
             phone: usuario.phone,
             location: usuario.location,
+            photo : fotoUsuario
           },
           perro: {
             _id: perro.id,
@@ -112,6 +115,8 @@ const getPostulacionesBySitter = async (req, res = response) => {
             const usuario = await Usuario.findById(postulacion.idUser);
             const perro = await Dog.findById(postulacion.idPerro);
 
+            const fotoUsuario = usuario.photo ? usuario.photo : ""; 
+
             return {
               estado: postulacion.state,
               id : postulacion._id,
@@ -122,6 +127,7 @@ const getPostulacionesBySitter = async (req, res = response) => {
                   lastname: usuario.lastname,
                   phone: usuario.phone,
                   location: usuario.location,
+                  photo : fotoUsuario
               },
               perro: {
                   _id: perro.id,
