@@ -66,7 +66,7 @@ const getPostulacionesByPostulant = async (req, res = response) => {
             location: usuario.location,
           },
           perro: {
-            id: perro.id,
+            _id: perro.id,
             name: perro.name,
             edad: perro.edad,
             peso: perro.peso,
@@ -124,7 +124,7 @@ const getPostulacionesBySitter = async (req, res = response) => {
                   location: usuario.location,
               },
               perro: {
-                  id: perro.id,
+                  _id: perro.id,
                   name: perro.name,
                   edad: perro.edad,
                   peso: perro.peso,
